@@ -1,0 +1,643 @@
+Red Wine Quality by Hassan Moharram
+========================================================
+
+```{r echo=FALSE,message=FALSE, warning=FALSE, Load_the_Data}
+library(ggplot2)
+library(dplyr)
+library(knitr)
+```
+
+We are exploring the Red Wine Quality dataset. This dataset contains 1,599 red wines with 11 variables on the chemical properties of the wine. At least 3 wine experts rated the quality of each wine, providing a rating between 0 (very bad) and 10 (very excellent).
+
+# Univariate Plots Section
+
+```{r echo=FALSE, Univariate_Plots1}
+
+df = read.csv('wineQualityReds.csv')
+head(df)
+summary(df)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots2}
+
+summary(df$fixed.acidity)
+qplot(data = df, x= fixed.acidity,
+      color = I('black'), fill = I('orange'),
+      binwidth = 0.3) +
+      scale_x_continuous(breaks = seq(5, 14, 0.3), limits = c(5, 14)) +
+      xlab('Tartaric Acid Volume in Red Wine (g/dm^3)') +
+      ylab('count')
+```
+
+We can see the distribution is more close to right-skewed distribution.   
+Most of red wines have (tartaric acid) between (6-10) g / dm^3.        
+(fixed.acidity) is a continuous variable.       
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots3}
+
+summary(df$volatile.acidity)
+qplot(data = df, x = volatile.acidity,
+      color = I('black'), fill = I('purple'),
+      binwidth = 0.01) +
+      scale_x_continuous(breaks = seq(0, 2, 0.04), limits = c(0, 1.1)) +
+      xlab('Acetic Acid Volume in Red Wine (g/dm^3)') +
+      ylab('count')
+```
+
+We can see that most of red wines have (acetic acid) between (0.2-0.8) g / dm^3.   
+(volatile.acidity) is a continuous variable.   
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots4}
+
+summary(df$citric.acid)
+qplot(data = df, x = citric.acid,
+      color = I('black'), fill = I('blue'),
+      binwidth = 0.01) +
+      scale_x_sqrt(breaks = seq(0, 0.75, 0.1)) +
+      xlab('Critic Acid Volume in Red Wine (g/dm^3)') +
+      ylab('count')
+```
+
+We can see that most of red wines have (citric acid) between (0.2-0.7) g / dm^3.   
+(citric.acid) is a continuous variable.   
+
+```{r echo=FALSE, Univariate_Plots5}
+df$total.acids <- (df$fixed.acidity + df$volatile.acidity + df$citric.acid)
+head(df)
+
+
+df <- df[c('fixed.acidity','volatile.acidity','citric.acid','total.acids',
+           'residual.sugar', 'chlorides', 'free.sulfur.dioxide', 'total.sulfur.dioxide',
+           'density', 'pH', 'sulphates', 'alcohol', 'quality')]
+head(df)
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots6}
+summary(df$total.acids)
+qplot(data = df, x = total.acids, 
+      color = I('black'), fill = I('#666600'),
+      binwidth = 0.5) +
+      scale_x_continuous(breaks = seq(6, 17.045, 0.5), limits = c(6, 15)) +
+      xlab('Total Acids Volume in Red Wine (g/dm^3)') +
+      ylab('count')
+```
+
+We can see that most of red wines have (total acids) between (7-10) g / dm^3.   
+The distribution is more close to right-skewed distribution.      
+(total.acids) is a continuous variable.   
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots7}
+
+summary(df$residual.sugar)
+qplot(data = df, x = residual.sugar,
+      color = I('black'), fill = I('pink') ,
+      binwidth = 0.1) +
+      scale_x_continuous(limits = c(1, 3.5), breaks = seq(1, 3.5, 0.1)) +
+      xlab('Residual Sugar Volume in Red Wine (g/dm^3)') +
+      ylab('count')
+```
+
+We can see that most of red wines have (residual sugar) between (1.3-3.1) g / dm^3.   
+The distribution is more close to normal distribution.   
+(residual.sugar) is a continuous variable.   
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots8}
+
+summary(df$chlorides)
+qplot(data = df, x = chlorides,
+      color = I('black'), fill = I('red'),
+      binwidth = 0.001) +
+      scale_x_continuous(limits = c(0.03, 0.13), breaks = seq(0, 0.2, 0.01)) +
+      xlab('Chlorides Volume in Red Wine (g/dm^3)') +
+      ylab('count')
+```
+
+We can see that the disribution is more close to normal distribution.   
+Most of red wines have chlorides between (0.05-0.11) g / dm^3.   
+(chlorides) is a continuous variable.   
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots9}
+
+summary(df$free.sulfur.dioxide)
+qplot(data = df, x = free.sulfur.dioxide, 
+      color = I('red'), fill = I('white'),
+      binwidth = 1) +
+      scale_x_continuous(breaks = seq(0, 45, 1), limits = c(3, 45)) +
+      xlab('Free Sulfur Dioxide Volume in Red Wine (g/dm^3)') +
+      ylab('count')
+```
+
+We can see that the distribution is close to right-skewed distribution.   
+Most of red wines have (free sulfur dioxide) between (5-20) g / dm^3.   
+(free.sulfur.dioxide) is a continuous variable.   
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots10}
+
+summary(df$total.sulfur.dioxide)
+qplot(data = df, x = total.sulfur.dioxide,
+      color = I('black'), fill = I('red') ,
+      binwidth = 1) +
+      scale_x_continuous(limits = c(6, 150), breaks = seq(6,150,5)) +
+      xlab('Total Sulfur Dioxide Volume in Red Wine (g/dm^3)') +
+      ylab('count')
+```
+
+We can see that the distribution is close to right-skewed distribution.   
+Most of red wines have (total sulfur dioxide) between (11-75) g / dm^3.      
+(total.sulfur.dioxide) is a continuous variable.   
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots11}
+
+summary(df$density)
+qplot(data = df, x = density, 
+      color = I('black'), fill = I('purple'),
+      binwidth = 0.0001) +
+      scale_x_continuous(breaks = seq(0.99, 1.0037, .001)) +
+      xlab('Wine Density of Red Wine') +
+      ylab('count')
+```
+
+We can see that the distribution is close to normal distribution.   
+Most of red wines have (density) between (0.993-1) g / dm^3.    
+(density) is a continuous variable.    
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots12}
+
+summary(df$pH)
+qplot(data = df, x = pH, 
+      color = I('black'), fill = I('#009999'), 
+      binwidth = 0.01) +
+      scale_x_continuous(breaks = seq( 2.740, 4.01, 0.1), limits = c(2.95, 3.65)) +
+      xlab('pH Scale in Red Wine (0-14)') +
+      ylab('count')
+```
+
+We can see that the distribution is close to normal distribution.   
+Most of red wines have (pH) between (3-4).   
+(pH) is a continuous variable.   
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots13}
+
+summary(df$sulphates)
+qplot(data = df, x = sulphates, 
+      color = I('black'), fill = I('#CCCC00'), 
+      binwidth = 0.01) +
+      scale_x_continuous(breaks = seq(0.33, 2, 0.1), limits = c(0.4, 1)) +
+      xlab('Sulphates Volume in Red Wine (g/dm^3)') +
+      ylab('count')
+```
+
+We can see that the distribution is close to right-skewed distribution.   
+Most of red wines have (sulphated) between (0.43-0.9) g / dm3.    
+(sulphates) is a continuous variable.    
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots14}
+
+summary(df$alcohol)
+qplot(data = df, x = alcohol, 
+      color = I('black'), fill = I('#99CCFF'), 
+      binwidth = 0.1) +
+      scale_x_continuous(breaks = seq(9, 14, 0.2), limits = c(9, 14)) +
+      xlab('Acohol Percentage in Red Wine (%)') + 
+      ylab('count')
+
+```
+
+We can see that the distribution is close to right-skewed distribution.   
+Most of red wines have (alcohol) between (9-12) %.   
+(alchohol) is a continuous variable.   
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots15}
+summary(df$quality)
+qplot(data = df, x = quality, 
+      color = I('black'), fill = I('#E5FFCC'), 
+      binwidth = 1) +
+      scale_x_continuous(breaks = seq(0, 8, 1)) +
+      xlab('Red Wine Quality (0-10)') +
+      ylab('count')
+```
+
+We can see that most of red wines have (quality) of 5 or 6.    
+
+
+# Univariate Analysis
+
+
+### What is the structure of your dataset?
+This dataset contains 1,599 red wines with 11 variables on the chemical properties of the red wine plus 1 variable on its quality.
+
+### What is/are the main feature(s) of interest in your dataset?
+- The volume of each acid type.
+- The volume of residual sugar.
+- The density of the red wine.
+- The degree of (pH) which describes how much the red wine is acidic or basic.
+- The alchohol percentage.
+- The quality of the red wine.
+
+### What other features in the dataset do you think will help support your \
+investigation into your feature(s) of interest?
+- How much does it take to manufacture and produce the red wine ?
+- Which countries make and sell the red wine?
+- What is the best time of year to make the red wine.
+
+### Did you create any new variables from existing variables in the dataset?
+Yes, I created (total.acids) variable and it equals to sum of all acid types((tartaric, (acetic, and critic) in red wine.
+
+### Of the features you investigated, were there any unusual distributions? \
+Did you perform any operations on the data to tidy, adjust, or change the form \
+of the data? If so, why did you do this?
+I made some adjustments when plotting each variable to make the distribution  close to any familiar distribution.
+
+
+# Bivariate Plots Section
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots1}
+
+ggplot(aes(x = quality, y = total.acids), data = df) +
+  geom_jitter(alpha = 1/5, color = I('red')) +
+  xlim(3,8) +
+  coord_trans(y = 'sqrt') +
+   geom_line(stat = 'summary', fun.y = quantile, fun.args = list(probs = 0.5),
+             linetype = 2, color = 'blue') +
+  geom_line(stat = 'summary', fun.y = quantile, fun.args = list(probs = 0.25),
+             linetype = 2, color = I('#666600')) +
+  geom_line(stat = 'summary', fun.y = quantile, fun.args = list(probs = 0.75))
+```
+
+```{r echo=FALSE, Bivariate_Plots2}
+
+cor.test(x= df$total.acids, y = df$quality, method = 'pearson')
+```
+
+
+The relation between red wine quality and total acids isn't really strong enough which means that the total acids don't have that big effect on the red wine quality.    
+75 % of red wine total acids are less than or equal 10  g / dm^3.    
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots33}
+
+ggplot(aes(x = quality, y = fixed.acidity), data = df) +
+  geom_jitter(alpha = 1/5, color = 'orange') +
+  ylab('fixed.acidity (tartaric acid)') +
+  xlim(3,8) +
+  geom_smooth(method = 'lm')
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots44}
+
+cor.test(x= df$quality, y = df$fixed.acidity, method = 'pearson')
+```
+
+
+looks like there is a positive relation between the quality and tartaric acid volume in the red wine.    
+By increasing the tartaric acid volume, the quality increases as well.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots55}
+
+ggplot(aes(x = quality, y = volatile.acidity), data = df) +
+  geom_jitter(alpha = 1/5, color = 'orange') +
+  ylab('volatile.acidity (acetic acid)') +
+  xlim(3,8) +
+  geom_smooth(method = 'lm')
+```
+```{r echo=FALSE, Bivariate_Plots66}
+
+cor.test(x= df$quality, y = df$volatile.acidity, method = 'pearson')
+```
+
+looks like there is a negative relation between the quality and acetic acid volume in the red wine. By increasing the acetic acid volume, the quality decreases.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots77}
+
+ggplot(aes(x = quality, y = alcohol), data = df) +
+  geom_jitter(alpha = 1/5, color = 'orange') +
+  ylab('alcohol (% by volume)') +
+  xlim(3,8) +
+  geom_smooth(method = 'lm')
+```
+
+```{r echo=FALSE, Bivariate_Plots88}
+
+cor.test(x= df$quality, y = df$alcohol, method = 'pearson')
+```
+
+
+looks like there is some sort of positive relation between the quality and alcohol percentage by volume. By increasing the alcohol percentage, the quality increases.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots99}
+
+ggplot(aes(x = total.acids, y = pH) , data = df) +
+  geom_jitter() +
+  geom_smooth(method = 'lm', color = 'red')
+```
+
+
+```{r echo=FALSE, Bivariate_Plots10}
+
+cor.test(x= df$total.acids, y = df$pH, method = 'pearson')
+```
+
+
+looks like there is a negative relation between total acids volume in red wine and pH scale of the red wine.By increasing the total acids volume, the PH scale decreases which means that the red wine becomes more basic.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Bivariate_Plots11}
+
+ggplot(aes(x = alcohol, y = density), data = df) +
+  geom_jitter() +
+  xlab('alcohol (% by volume)') +
+  geom_smooth(method = 'lm', color = 'yellow')
+```
+
+
+```{r echo=FALSE, Bivariate_Plots12}
+
+cor.test(x= df$alcohol, y = df$density, method = 'pearson')
+```
+
+
+looks like there is a negative relation between alcohol percentage by volume in red wine and density of the red wine.By increasing  alcohol percentage, the density.
+
+```{r echo=FALSE, Bivariate_Plots13}
+
+ggplot(aes(x = citric.acid, y = pH), data = df) +
+  geom_jitter() +
+   geom_smooth(method = 'lm', color = 'blue')
+```
+
+```{r echo=FALSE, Bivariate_Plots14}
+
+cor.test(x= df$citric.acid, y = df$pH, method = 'pearson')
+```
+
+
+looks like there is a negative relation between citric acid volume in red wine and pH scale of the red wine.By increasing citric acid volume, the pH scale decreases.
+
+```{r echo=FALSE, Bivariate_Plots15}
+
+ggplot(aes(x = fixed.acidity, y = citric.acid), data = df) +
+  geom_jitter() +
+  geom_smooth(method = 'lm', color = 'gray') +
+  xlab('fixed.acidity(tartaric acid)') +
+  ylab('citric.acid')
+```
+
+
+```{r echo=FALSE, Bivariate_Plots16}
+
+cor.test(x= df$fixed.acidity, y = df$citric.acid, method = 'pearson')
+```
+
+
+looks like there is a positive relation between tartaric acid volume and citric acid volume in the red wine.By increasing tartaric acid volume, the citric acid volume increases as well.
+
+```{r echo=FALSE, Bivariate_Plots17}
+
+ggplot(aes(x = volatile.acidity, y = citric.acid), data = df) +
+  geom_jitter() +
+  geom_smooth(method = 'lm', color = 'green') +
+  xlab('volatile.acidity(acetic acid)') +
+  ylab('citric.acid')
+```
+
+```{r echo=FALSE, Bivariate_Plots18}
+
+cor.test(x= df$volatile.acidity, y = df$citric.acid, method = 'pearson')
+```
+
+
+looks like there is a negative relation between acetic acid volume and citric acid volume in the red wine.By increasing acetic acid volume, the citric acid volume decreases.
+
+
+```{r echo=FALSE, Bivariate_Plots19}
+
+ggplot(aes(x = alcohol, y = residual.sugar), data = df) +
+  geom_jitter(alpha = 1/5) +
+  scale_y_continuous(breaks = seq(0.9, 15.5, 0.5)) +
+  scale_x_continuous(breaks = seq(8.4, 14.9, 0.5)) +
+  xlab('alcohol (%)') +
+  ylab('residual sugar (g/dm3)')
+```
+
+```{r echo=FALSE, Bivariate_Plots20}
+
+cor.test(x = df$alcohol, y = df$residual.sugar)
+```
+
+Most of red wines have residual sugar between (1.5-3) g / dm3.    
+From the previous plot we can observe that increasing alcohol percentage volume doesn't really affect the residual sugar volume in red wine.
+
+ 
+
+# Bivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. How did the feature(s) of interest vary with other features in \
+the dataset?
+- The relation between quality and total.acids is positive.
+- The relation between quality and fixed.acidity is positive.
+- The relation between quality and volatie.acidity is negative.
+- The relation between quality and alcohol is positive.
+- The relation between citric acid and pH is negative.
+- The relation between citric acid and fixed.acidity is positive.
+- The relation between citric acid and volatile.acidity is negative
+- The relation between alcohol and density is negative.
+- The relation between alcohol and residual.sugar is positive.
+- The relation between total.acids and pH is negative.
+
+
+### Did you observe any interesting relationships between the other features \
+(not the main feature(s) of interest)?
+- The relation between alcohol and density is negative.
+- The relation between total.acids and pH is negative.
+
+### What was the strongest relationship you found?
+- The relation between citric acid and fixed.acidity (cor: 0.6717034)
+- The relation between total.acids and pH (cor: -0.6834838)
+
+# Multivariate Plots Section
+
+
+```{r echo=FALSE, Multivariate_Plots1}
+
+ggplot(aes(x = alcohol, y = density), data = df) +
+  geom_point(aes(color = factor(quality))) +
+  scale_x_continuous(breaks = seq(8, 15, 0.3)) +
+  scale_y_continuous(breaks = seq(0.99, 1.004, 0.001)) +
+  xlab('alcohol (%)') +
+  ylab('density (g/dm3)') + 
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1) 
+  
+```
+
+
+```{r echo=FALSE, Multivariate_Plots2}
+
+ggplot(aes(x = alcohol, y = density), data = df) +
+  geom_point(aes(color = factor(quality))) +
+  facet_wrap(~quality) +
+  scale_x_continuous(breaks = seq(8, 15, 0.5)) +
+  scale_y_continuous(breaks = seq(0.99, 1.004, 0.001)) +
+  xlab('alcohol (%)') +
+  ylab('density (g/dm3)') + 
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)
+```
+
+
+We can educe from the 2 previous scatter plots that most of high quality red wines have higher alcohol percentage and lower density.
+
+
+
+```{r echo=FALSE, Bivariate_Plots3}
+
+ggplot(aes(x = citric.acid, y = pH) , data = df) +
+  geom_point(aes(color = factor(quality))) +
+  xlab('citric acid volume (g/dm3)') +
+  ylab('pH scale (0(very acidic) - 14(very basic)') + 
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)
+```
+
+```{r echo=FALSE, Bivariate_Plots4}
+
+ggplot(aes(x = citric.acid, y = pH) , data = df) +
+  geom_point(aes(color = factor(quality))) +
+  facet_wrap(~quality) +
+  xlab('citric acid volume (g/dm3)') +
+  ylab('pH scale (0(very acidic) - 14(very basic)') + 
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)
+  
+```
+
+
+From the previous 2 scatter plots, we can observe the distribution of each red wine quality when plotting the relation between citric acid volume and pH scale.    
+We can see that most of red wine qualities have citric acid volume less than 0.75 g/dm3 and ph scale between (3-4).
+
+
+```{r echo=FALSE, Bivariate_Plots5}
+ggplot(aes(x = fixed.acidity, y = citric.acid), data = df) +
+  xlab('fixed.acidity(tartaric acid)') +
+  ylab('citric.acid') +
+  geom_point(aes(color = factor(quality))) + 
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)
+```
+
+```{r echo=FALSE, Bivariate_Plots6}
+
+ggplot(aes(x = fixed.acidity, y = citric.acid), data = df) +
+  xlab('fixed.acidity(tartaric acid)') +
+  ylab('citric.acid') +
+  geom_point(aes(color = factor(quality))) +
+  facet_wrap(~quality) + 
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)
+```
+
+
+We can educe from the 2 previous scatter plots that most of high quality red wines have higher tartaric acid and citric acid.
+
+```{r echo=FALSE, Bivariate_Plots7}
+
+ggplot(aes(x = alcohol, y = residual.sugar), data = df) +
+  xlab('alcohol(% by volume)') +
+  ylab('residual sugar') +
+  geom_point(aes(color = factor(quality))) + 
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)
+```
+
+```{r echo=FALSE, Bivariate_Plots8}
+
+ggplot(aes(x = alcohol, y = residual.sugar), data = df) +
+  xlab('alcohol(% by volume)') +
+  ylab('residual sugar') +
+  geom_point(aes(color = factor(quality))) +
+  facet_wrap(~quality) + 
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1)
+```
+
+
+We can educe from the 2 previous scatter plots that most of high quality red wines have higher alcohol percentage and lower residual sugar.
+
+
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. Were there features that strengthened each other in terms of \
+looking at your feature(s) of interest?
+
+- By plotting the relation between (alcohol) and (density) and observing each red wine quality, I found that most of high quality red wines have higher alcohol percentage and lower density.
+- By plotting the relation between (citric acid) and (pH) and observing each red wine quality, I found that most of red wine qualities have citric acid volume less than 0.75 g/dm3 and ph scale between (3-4).
+- By plotting the relation between (fixed.acidity) and (citric acid) and observing each red wine quality, I found that most of high quality red wines have higher tartaric acid and citric acid.
+- By plotting the relation between (alcohol) and (residual.sugar) and observing each red wine quality, I found that most of high quality red wines have higher alcohol percentage and lower residual sugar.
+
+### Were there any interesting or surprising interactions between features?
+By plotting the relation between (alcohol) and (density) and observing each red wine quality, I found that most of high quality red wines have higher alcohol percentage and lower density, but there are also high quality red wines low have alcohol percentage and high density. We can say that also about the other Multivariate Plots, so all the previous results and plots aren't 100% decisive, so after each plot I said (most of) not (all).
+
+### OPTIONAL: Did you create any models with your dataset? Discuss the \
+strengths and limitations of your model.
+
+------
+
+# Final Plots and Summary
+
+
+### Plot One
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_One}
+
+qplot(data = df, x = alcohol, 
+      color = I('black'), fill = I('#99CCFF'), 
+      binwidth = 0.1) +
+      scale_x_continuous(breaks = seq(9, 14, 0.2), limits = c(9, 14)) +
+      xlab('Alcohol Percentage in Red Wine (%)') + 
+      ylab('count (n)') +
+      ggtitle('Alcohol Volume in Red Wine')
+```
+
+### Description One
+I choosed the (alcohol percentage) variable in red wine because it's one of things peaple talk about most and whats to know when choosing their red wine.   
+We can see that the distribution is close to right-skewed distribution.   
+Most of red wines have (alcohol) between (9-12) %.    
+(alchohol) is a continuous variable.   
+
+### Plot Two
+```{r echo=FALSE, Plot_Two}
+
+ggplot(aes(x = total.acids, y = pH) , data = df) +
+  geom_jitter() +
+  geom_smooth(method = 'lm', color = 'red') +
+  ylab('pH scale (0(very acidic) - 14(very basic))') +
+  xlab('total.acids (g/dm3)') +
+  ggtitle('Total Acides Volume and Ph scale')
+```
+
+### Description Two
+I choosed this relation because the total acids volume is a good indication of how basic or acidic the red wine is.   
+looks like there is a negative relation between total acids volume in red wine and pH scale of the red wine.By increasing the total acids volume, the PH scale decreases which means that the red wine becomes more basic.    
+
+### Plot Three
+```{r echo=FALSE, Plot_Three}
+
+ggplot(aes(x = alcohol, y = density), data = df) +
+  geom_point(aes(color = factor(quality))) +
+  scale_x_continuous(breaks = seq(8, 15, 0.3)) +
+  scale_y_continuous(breaks = seq(0.99, 1.004, 0.001)) +
+  xlab('alcohol (%)') +
+  ylab('density (g/dm3)') + 
+  ggtitle('Alcohol Percentage Volume and Denstiy, by Quality') +
+  scale_color_brewer(palette = "RdYlBu", name="Quality", direction=-1) 
+  
+```
+
+### Description Three
+I choosed this relation to see how the quality changes when controling both of the alcohol percentage by volume and the density.   
+We can educe from the 2 previous scatter plots that most of high quality red wines have higher alcohol percentage and lower density.     
+
+
+------
+
+# Reflection
+
+We explored and performed some analysis and plots on the red wine dataset. We made some observations on the features related to the red wine. We ploted one feature in a single plot, two features in the one plot, and multiple features also in one plot.The struggles were in read the dataset and understand it well before doing any analysis.I were surprised by the number of features related to the red wine, I thought it's more simple than that. I suggest adding more features like the time needed to produce the red wine by factories and the countires that produce it in the world. Also , the price of each quality.
